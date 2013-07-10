@@ -1,43 +1,50 @@
 (function(base) {
-	
+
 	base.playlistloader = function(playerApi) {
 		var _this = this;
 		var index = 0;
 		var playlist = [];
 
-		this.load = function(arr) {
-			_this.list = convert(arr);
-			load();
+		this.load = function(videos) {
+			_this.videos = formatForVimeoAPI(videos);
+			loadNextVideo();
 			return playlist;
 		};
-		
-		function convert(arr) {
-			for (var i = 0; i < arr.length; i++) {
+
+		function formatForVimeoAPI(videos) {
+			for (var i = 0; i < videos.length; i++) {
 				var apiV2 = "vimeo.com/api/v2/";
-				arr[i] = arr[i].replace(/vimeo.com\/(\d+)$/i, apiV2 + 'video/$1.json');
-				arr[i] = arr[i].replace(/vimeo.com\/([A-Z0-9]+)([\?A-Z0-9=]*)$/i, apiV2 + '$1/videos.json$2');
-				arr[i] = arr[i].replace(/vimeo.com\/groups\/([A-Z0-9]+)([\?A-Z0-9=]*)$/i, apiV2 + 'group/$1/videos.json$2');
-				arr[i] = arr[i].replace(/vimeo.com\/channels\/([A-Z0-9]+)([\?A-Z0-9=]*)$/i, apiV2 + 'channel/$1/videos.json$2');
-				arr[i] = arr[i].replace(/vimeo.com\/album\/([A-Z0-9]+)([\?A-Z0-9=]*)$/i, apiV2 + 'album/$1/videos.json$2');
+                videos[i].api_url = videos[i].url
+                videos[i].api_url = videos[i].api_url.replace(/vimeo.com\/(\d+)$/i, apiV2 + 'video/$1.json');
+                videos[i].api_url = videos[i].api_url.replace(/vimeo.com\/([A-Z0-9]+)([\?A-Z0-9=]*)$/i, apiV2 + '$1/videos.json$2');
+                videos[i].api_url = videos[i].api_url.replace(/vimeo.com\/groups\/([A-Z0-9]+)([\?A-Z0-9=]*)$/i, apiV2 + 'group/$1/videos.json$2');
+                videos[i].api_url = videos[i].api_url.replace(/vimeo.com\/channels\/([A-Z0-9]+)([\?A-Z0-9=]*)$/i, apiV2 + 'channel/$1/videos.json$2');
+                videos[i].api_url = videos[i].api_url.replace(/vimeo.com\/album\/([A-Z0-9]+)([\?A-Z0-9=]*)$/i, apiV2 + 'album/$1/videos.json$2');
 			}
-			return arr;
+			return videos;
 		}
-		
-		function load() {
-			base.utils.jsonp(_this.list[index++], {}, loaded);
+
+		function loadNextVideo() {
+            url = _this.videos[index++].api_url;
+            params = {};
+            callback = mergeVideo;
+
+
+			base.utils.jsonp(url, params, callback);
 		}
-		
-		function loaded(json) {
-		
+
+		function mergeVideo(json) {
+            options = _this.videos[index-1];
+            base.utils.extend(json[0], options);
 			playlist = playlist.concat(json);
 
-			if (index < _this.list.length) {
-				load();
+			if (index < _this.videos.length) {
+                loadNextVideo();
 			} else {
 				playerApi.events.playlist.dispatch(playlist);
 				playerApi.events.playlist.remove();
 			}
 		}
 	};
-	
+
 })(vimeowrap);

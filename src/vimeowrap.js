@@ -138,7 +138,17 @@
 			
 			this.events.playlist.add(playlistLoaded);
 			var loader = new vimeowrap.playlistloader(this);
-			loader.load(config.urls);
+
+            // Load URL provided in the configuration into the video object array
+            if (!config.videos) {
+                config.videos = [];
+            }
+            if (config.urls) {
+                for(var i = 0; i < config.urls.length; i++) {
+                    config.videos.push({url:config.urls[i]});
+                }
+            }
+			loader.load(config.videos);
 
 			return this;
 		};
