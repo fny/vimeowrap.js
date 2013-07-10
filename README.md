@@ -20,6 +20,22 @@ vimeowrap is an easy to use Vimeo player embedder that can be extended with plug
 	});
 </script>
 ```
+### Custom Attributes
+``` html
+<div id="player"></div>
+<script src="http://luwes.co/vimeowrap.js/vimeowrap.js"></script>
+<script>
+	vimeowrap('player').setup({
+		videos: [
+		   {
+			    url: 'https://vimeo.com/17950038',
+			    title: 'Custom Title'
+		   }
+		]
+	});
+</script>
+```
+
 
 ### Carousel Plugin
 ``` html
@@ -49,7 +65,12 @@ vimeowrap is an easy to use Vimeo player embedder that can be extended with plug
 	<tr>
 		<th>urls</th>
 		<td></td>
-		<td>(required) Array with the Vimeo URL's. User or video URL's are supported.</td>
+		<td>Array with the Vimeo URL's. User or video URL's are supported. Required unless `videos` are provided.</td>
+	</tr>
+	<tr>
+		<th>videos</th>
+		<td></td>
+		<td>Array of objects containing the Vimeo URL and custom attributes to use during rendering (e.g. <code>{url: 'http://vimeo.com/17950038', title: 'Custom title'}</code>).  Video URL's are supported. Required unless `urls` are provided.</td>
 	</tr>
 	<tr>
 		<th>width</th>
