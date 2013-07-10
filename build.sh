@@ -2,27 +2,27 @@
 
 cd $(dirname $0)
 
-uglifyjs2 src/vimeowrap.js \
+uglifyjs src/vimeowrap.js \
 	src/playlistloader.js \
 	src/utils.js \
 	src/signal.js \
 	src/froogaloop.js \
 	-o vimeowrap.js -m
 	
-uglifyjs2 src/plugins/carousel/carousel.js \
+uglifyjs src/plugins/carousel/carousel.js \
 	src/plugins/carousel/noclickdelay.js \
 	src/plugins/carousel/Tween.js \
 	-o vimeowrap.carousel.js -m
 	
-uglifyjs2 src/plugins/lightsout/lightsout.js \
+uglifyjs src/plugins/lightsout/lightsout.js \
 	src/plugins/lightsout/fade.js \
 	-o vimeowrap.lightsout.js -m
 
-uglifyjs2 src/plugins/playlist/playlist.js \
+uglifyjs src/plugins/playlist/playlist.js \
 	src/plugins/playlist/noclickdelay.js \
 	src/plugins/playlist/skinny-scroll.js \
 	-o vimeowrap.playlist.js -m
 
-uglifyjs2 src/plugins/infobox/infobox.js \
+uglifyjs src/plugins/infobox/infobox.js \
 	-o vimeowrap.infobox.js -m
 	
